@@ -1,0 +1,809 @@
+openapi: 3.0.3
+info:
+  title: Casehorizon
+  version: 0.1.0
+  description: AI futures policy-lab platform. Runs domain case packs and impact canvases for emerging
+    policy leaders, produces ranked recommendations, and binds automation proposals to Algorithmic Impact
+    Assessment phase gates.
+  x-product-slug: ai-gov-casehorizon
+  x-source: ai-in-gov/ai-future-policy-labs-ottawa/
+servers:
+- url: https://api.example.com
+tags:
+- name: Templates
+  description: Reusable lab agendas
+- name: CasePacks
+  description: Domain AI case studies
+- name: Labs
+  description: Lab instances and cohorts
+- name: Canvases
+  description: Impact canvas responses
+- name: Recommendations
+  description: Ranked owned recommendations
+- name: AiaGates
+  description: AIA phase-gate linkages
+- name: Actions
+  description: Post-lab follow-up actions
+paths:
+  /v1/templates:
+    get:
+      operationId: listLabTemplates
+      tags:
+      - Templates
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      parameters:
+      - $ref: '#/components/parameters/Cursor'
+      - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListEnvelopeLabTemplate'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createLabTemplate
+      tags:
+      - Templates
+      security:
+      - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LabTemplateCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataEnvelopeLabTemplate'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /v1/case-packs:
+    get:
+      operationId: listCasePacks
+      tags:
+      - CasePacks
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      parameters:
+      - $ref: '#/components/parameters/Cursor'
+      - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListEnvelopeCasePack'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createCasePack
+      tags:
+      - CasePacks
+      security:
+      - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CasePackCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataEnvelopeCasePack'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /v1/labs:
+    get:
+      operationId: listLabInstances
+      tags:
+      - Labs
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      parameters:
+      - $ref: '#/components/parameters/Cursor'
+      - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListEnvelopeLabInstance'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createLabInstance
+      tags:
+      - Labs
+      security:
+      - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LabInstanceCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataEnvelopeLabInstance'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /v1/labs/{labId}/canvases:
+    parameters:
+    - $ref: '#/components/parameters/LabId'
+    get:
+      operationId: listCanvasResponses
+      tags:
+      - Canvases
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      parameters:
+      - $ref: '#/components/parameters/Cursor'
+      - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListEnvelopeCanvasResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: submitCanvasResponse
+      tags:
+      - Canvases
+      security:
+      - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CanvasResponseCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataEnvelopeCanvasResponse'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /v1/labs/{labId}/recommendations:
+    parameters:
+    - $ref: '#/components/parameters/LabId'
+    get:
+      operationId: listRecommendations
+      tags:
+      - Recommendations
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      parameters:
+      - $ref: '#/components/parameters/Cursor'
+      - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListEnvelopeRecommendation'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createRecommendation
+      tags:
+      - Recommendations
+      security:
+      - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecommendationCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataEnvelopeRecommendation'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /v1/aia-gates:
+    get:
+      operationId: listAiaPhaseGates
+      tags:
+      - AiaGates
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      parameters:
+      - $ref: '#/components/parameters/Cursor'
+      - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListEnvelopeAiaPhaseGate'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: linkAiaPhaseGate
+      tags:
+      - AiaGates
+      security:
+      - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AiaPhaseGateLink'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataEnvelopeAiaPhaseGate'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+  /v1/actions:
+    get:
+      operationId: listFollowUpActions
+      tags:
+      - Actions
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      parameters:
+      - $ref: '#/components/parameters/Cursor'
+      - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListEnvelopeFollowUpAction'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createFollowUpAction
+      tags:
+      - Actions
+      security:
+      - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FollowUpActionCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataEnvelopeFollowUpAction'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    Cursor:
+      name: cursor
+      in: query
+      schema:
+        type: string
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 25
+    LabId:
+      name: labId
+      in: path
+      required: true
+      schema:
+        type: string
+    RecommendationId:
+      name: recommendationId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    UnprocessableEntity:
+      description: Unprocessable entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+  schemas:
+    ResponseMeta:
+      type: object
+      required:
+      - requestId
+      - timestamp
+      properties:
+        requestId:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+    Problem:
+      type: object
+      required:
+      - type
+      - title
+      - status
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+    LabTemplate:
+      type: object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        version:
+          type: string
+        status:
+          type: string
+    CasePack:
+      type: object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+        domain:
+          type: string
+        title:
+          type: string
+        status:
+          type: string
+    LabInstance:
+      type: object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+        templateId:
+          type: string
+        city:
+          type: string
+        status:
+          type: string
+    CanvasResponse:
+      type: object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+        labId:
+          type: string
+        domain:
+          type: string
+        status:
+          type: string
+    Recommendation:
+      type: object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+        labId:
+          type: string
+        rank:
+          type: integer
+        text:
+          type: string
+        owner:
+          type: string
+    AiaPhaseGate:
+      type: object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+        recommendationId:
+          type: string
+        status:
+          type: string
+        applicable:
+          type: boolean
+    FollowUpAction:
+      type: object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+        recommendationId:
+          type: string
+        dueAt:
+          type: string
+          format: date-time
+        status:
+          type: string
+    LabTemplateCreate:
+      type: object
+      required:
+      - name
+      - version
+      properties:
+        name:
+          type: string
+        version:
+          type: string
+        agendaMarkdown:
+          type: string
+    CasePackCreate:
+      type: object
+      required:
+      - domain
+      - title
+      properties:
+        domain:
+          type: string
+          enum:
+          - housing
+          - justice
+          - education
+          - immigration
+          - hiring
+        title:
+          type: string
+        summary:
+          type: string
+        containsLivePersonalData:
+          type: boolean
+    LabInstanceCreate:
+      type: object
+      required:
+      - templateId
+      - city
+      properties:
+        templateId:
+          type: string
+        city:
+          type: string
+        casePackIds:
+          type: array
+          items:
+            type: string
+    CanvasResponseCreate:
+      type: object
+      required:
+      - labId
+      - domain
+      properties:
+        labId:
+          type: string
+        domain:
+          type: string
+        impactedGroups:
+          type: array
+          items:
+            type: string
+        policyTouches:
+          type: array
+          items:
+            type: string
+        notes:
+          type: string
+    RecommendationCreate:
+      type: object
+      required:
+      - labId
+      - rank
+      - text
+      - owner
+      properties:
+        labId:
+          type: string
+        rank:
+          type: integer
+        text:
+          type: string
+        owner:
+          type: string
+        policyLever:
+          type: string
+    AiaPhaseGateLink:
+      type: object
+      required:
+      - recommendationId
+      - applicable
+      properties:
+        recommendationId:
+          type: string
+        applicable:
+          type: boolean
+        waiverReason:
+          type: string
+        externalAiaId:
+          type: string
+    FollowUpActionCreate:
+      type: object
+      required:
+      - recommendationId
+      - dueAt
+      properties:
+        recommendationId:
+          type: string
+        dueAt:
+          type: string
+          format: date-time
+        description:
+          type: string
+    DataEnvelopeLabTemplate:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          $ref: '#/components/schemas/LabTemplate'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ListEnvelopeLabTemplate:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          type: object
+          required:
+          - items
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/LabTemplate'
+            nextCursor:
+              type: string
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    DataEnvelopeCasePack:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          $ref: '#/components/schemas/CasePack'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ListEnvelopeCasePack:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          type: object
+          required:
+          - items
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/CasePack'
+            nextCursor:
+              type: string
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    DataEnvelopeLabInstance:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          $ref: '#/components/schemas/LabInstance'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ListEnvelopeLabInstance:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          type: object
+          required:
+          - items
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/LabInstance'
+            nextCursor:
+              type: string
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    DataEnvelopeCanvasResponse:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          $ref: '#/components/schemas/CanvasResponse'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ListEnvelopeCanvasResponse:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          type: object
+          required:
+          - items
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/CanvasResponse'
+            nextCursor:
+              type: string
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    DataEnvelopeRecommendation:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          $ref: '#/components/schemas/Recommendation'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ListEnvelopeRecommendation:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          type: object
+          required:
+          - items
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/Recommendation'
+            nextCursor:
+              type: string
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    DataEnvelopeAiaPhaseGate:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          $ref: '#/components/schemas/AiaPhaseGate'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ListEnvelopeAiaPhaseGate:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          type: object
+          required:
+          - items
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/AiaPhaseGate'
+            nextCursor:
+              type: string
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    DataEnvelopeFollowUpAction:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          $ref: '#/components/schemas/FollowUpAction'
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
+    ListEnvelopeFollowUpAction:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          type: object
+          required:
+          - items
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/FollowUpAction'
+            nextCursor:
+              type: string
+        meta:
+          $ref: '#/components/schemas/ResponseMeta'
